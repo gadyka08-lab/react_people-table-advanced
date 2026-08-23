@@ -75,7 +75,10 @@ export const PeoplePage = () => {
   const sortedPeople = getSortedPeople(people, sortField, orderField);
 
   const visiblePeople = sortedPeople.filter(person => {
-    const nameMatch = person.name.toLowerCase().includes(query.toLowerCase());
+    const nameMatch =
+      person.name.toLowerCase().includes(query.toLowerCase()) ||
+      person.motherName?.toLowerCase().includes(query.toLowerCase()) ||
+      person.fatherName?.toLowerCase().includes(query.toLowerCase());
     const centuryOfPeople = Math.ceil(person.born / 100);
     const matchesCenturies =
       centuries.length === 0 || centuries.includes(String(centuryOfPeople));
@@ -90,7 +93,12 @@ export const PeoplePage = () => {
     if (name === 'sort' && searchParams.get('sort') === value) {
       const currentOrder = searchParams.get('order');
 
-      params.set('order', currentOrder === 'asc' ? 'desc' : 'asc');
+      if (currentOrder === 'desc') {
+        params.delete('sort');
+        params.delete('order');
+      } else {
+        params.set('order', currentOrder === 'asc' ? 'desc' : 'asc');
+      }
     } else {
       params.set(name, value);
       if (name === 'sort') {
@@ -225,7 +233,9 @@ export const PeoplePage = () => {
         </div>
 
         <div className="column is-one-quarter">
-          <PeopleFilters query={query} onQueryChange={handleQueryChange} />
+          {!isLoading && people.length > 0 && (
+            <PeopleFilters query={query} onQueryChange={handleQueryChange} />
+          )}
         </div>
       </div>
     </>
