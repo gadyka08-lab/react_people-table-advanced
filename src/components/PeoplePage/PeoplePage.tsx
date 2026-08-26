@@ -6,6 +6,7 @@ import { PersonLink } from '../PersonLink/PersonLink';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { PeopleFilters } from '../PeopleFilters';
 import { SearchLink } from '../SearchLink';
+import { getPeople } from '../../api';
 
 export const PeoplePage = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -17,14 +18,15 @@ export const PeoplePage = () => {
   useEffect(() => {
     setIsLoading(true);
     setHasError(false);
-    fetch('https://mate-academy.github.io/react_people-table/api/people.json')
-      .then(response => response.json())
+
+    getPeople()
       .then(data => {
         setPeople(data);
-        setIsLoading(false);
       })
       .catch(() => {
         setHasError(true);
+      })
+      .finally(() => {
         setIsLoading(false);
       });
   }, []);
@@ -88,28 +90,6 @@ export const PeoplePage = () => {
 
     return nameMatch && matchesCenturies && matchesSex;
   });
-
-  const createQueryString = (name: string, value: string) => {
-    const params = new URLSearchParams(searchParams.toString());
-
-    if (name === 'sort' && searchParams.get('sort') === value) {
-      const currentOrder = searchParams.get('order');
-
-      if (currentOrder === 'desc') {
-        params.delete('sort');
-        params.delete('order');
-      } else {
-        params.set('order', currentOrder === 'asc' ? 'desc' : 'asc');
-      }
-    } else {
-      params.set(name, value);
-      if (name === 'sort') {
-        params.set('order', 'asc');
-      }
-    }
-
-    return params.toString();
-  };
 
   const currentSort = searchParams.get('sort');
   const currentOrder = searchParams.get('order');
@@ -206,8 +186,13 @@ export const PeoplePage = () => {
                         Died{currentSort === 'died' && sortIcon}
                       </SearchLink>
                     </th>
-                    <th>Mother</th>
-                    <th>Father</th>
+                    {people.map(person => (
+                      <tr key={person.slug}>
+                        <td>{person.name}</td>
+                        <td>{person.motherName || '-'}</td>
+                        <td>{person.fatherName || '-'}</td>
+                      </tr>
+                    ))}
                   </tr>
                 </thead>
 
