@@ -1,9 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect, useState } from 'react';
 import { Loader } from '../Loader/Loader';
 import { Person } from '../../types';
 import { PersonLink } from '../PersonLink/PersonLink';
-import { Link, useParams, useSearchParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import { PeopleFilters } from '../PeopleFilters';
+import { SearchLink } from '../SearchLink';
 
 export const PeoplePage = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -142,44 +144,67 @@ export const PeoplePage = () => {
                 <thead>
                   <tr>
                     <th>
-                      <Link
-                        to={{
-                          pathname: '/people',
-                          search: createQueryString('sort', 'name'),
+                      <SearchLink
+                        params={{
+                          sort: 'name',
+                          order:
+                            currentSort === 'name' && currentOrder === 'asc'
+                              ? 'desc'
+                              : currentSort === 'name' &&
+                                  currentOrder === 'desc'
+                                ? null
+                                : 'asc',
                         }}
                       >
-                        Name{currentSort === 'name' && sortIcon}
-                      </Link>
+                        Name {currentSort === 'name' && sortIcon}
+                      </SearchLink>
                     </th>
                     <th>
-                      <Link
-                        to={{
-                          pathname: '/people',
-                          search: createQueryString('sort', 'sex'),
+                      <SearchLink
+                        params={{
+                          sort: 'sex',
+                          order:
+                            currentSort === 'sex' && currentOrder === 'asc'
+                              ? 'desc'
+                              : currentSort === 'sex' && currentOrder === 'desc'
+                                ? null
+                                : 'asc',
                         }}
                       >
                         Sex{currentSort === 'sex' && sortIcon}
-                      </Link>
+                      </SearchLink>
                     </th>
                     <th>
-                      <Link
-                        to={{
-                          pathname: '/people',
-                          search: createQueryString('sort', 'born'),
+                      <SearchLink
+                        params={{
+                          sort: 'born',
+                          order:
+                            currentSort === 'born' && currentOrder === 'asc'
+                              ? 'desc'
+                              : currentSort === 'born' &&
+                                  currentOrder === 'desc'
+                                ? null
+                                : 'asc',
                         }}
                       >
                         Born{currentSort === 'born' && sortIcon}
-                      </Link>
+                      </SearchLink>
                     </th>
                     <th>
-                      <Link
-                        to={{
-                          pathname: '/people',
-                          search: createQueryString('sort', 'died'),
+                      <SearchLink
+                        params={{
+                          sort: 'died',
+                          order:
+                            currentSort === 'died' && currentOrder === 'asc'
+                              ? 'desc'
+                              : currentSort === 'died' &&
+                                  currentOrder === 'desc'
+                                ? null
+                                : 'asc',
                         }}
                       >
                         Died{currentSort === 'died' && sortIcon}
-                      </Link>
+                      </SearchLink>
                     </th>
                     <th>Mother</th>
                     <th>Father</th>
