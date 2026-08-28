@@ -25,7 +25,6 @@ export const PeopleFilters: React.FC<FiltersProps> = ({
         <SearchLink params={{ sex: 'f' }}>Female</SearchLink>
       </p>
 
-      {/* пошук за ім'ям */}
       <div className="panel-block">
         <p className="control has-icons-left">
           <input
@@ -41,8 +40,6 @@ export const PeopleFilters: React.FC<FiltersProps> = ({
           </span>
         </p>
       </div>
-
-      {/* фільтр за століттям */}
       <div className="panel-block">
         <div className="level is-flex-grow-1 is-mobile" data-cy="CenturyFilter">
           <div className="level-left">
@@ -74,8 +71,6 @@ export const PeopleFilters: React.FC<FiltersProps> = ({
           </div>
         </div>
       </div>
-
-      {/* скидання фільтрів */}
       <div className="panel-block">
         <SearchLink
           params={{

@@ -121,6 +121,7 @@ export const PeoplePage = () => {
                 data-cy="peopleTable"
                 className="table is-striped is-hoverable is-narrow is-fullwidth"
               >
+                {/* шапка таблиці містить лише заголовки */}
                 <thead>
                   <tr>
                     <th>
@@ -136,7 +137,7 @@ export const PeoplePage = () => {
                                 : 'asc',
                         }}
                       >
-                        Name {currentSort === 'name' && sortIcon}
+                        Name{currentSort === 'name' && sortIcon}
                       </SearchLink>
                     </th>
                     <th>
@@ -186,16 +187,12 @@ export const PeoplePage = () => {
                         Died{currentSort === 'died' && sortIcon}
                       </SearchLink>
                     </th>
-                    {people.map(person => (
-                      <tr key={person.slug}>
-                        <td>{person.name}</td>
-                        <td>{person.motherName || '-'}</td>
-                        <td>{person.fatherName || '-'}</td>
-                      </tr>
-                    ))}
+                    <th>Mother</th>
+                    <th>Father</th>
                   </tr>
                 </thead>
 
+                {/* сама таблиця з даними*/}
                 <tbody>
                   {visiblePeople.map(person => {
                     const mother = people.find(
