@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect, useState } from 'react';
 import { Loader } from '../Loader/Loader';
-import { Person } from '../../types';
+import { Person, SortField, SortOrder, Sex } from '../../types';
 import { PersonLink } from '../PersonLink/PersonLink';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { PeopleFilters } from '../PeopleFilters';
@@ -33,9 +33,11 @@ export const PeoplePage = () => {
 
   const query = searchParams.get('query') || '';
   const centuries = searchParams.getAll('centuries');
-  const sex = searchParams.get('sex');
-  const sortField = searchParams.get('sort');
-  const orderField = searchParams.get('order');
+
+  // 🏷️ Типізуємо параметри статі та сортування згідно з нашими централізованими типами
+  const sex = searchParams.get('sex') as Sex | null;
+  const sortField = searchParams.get('sort') as SortField | null;
+  const orderField = searchParams.get('order') as SortOrder;
 
   const handleQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -52,8 +54,8 @@ export const PeoplePage = () => {
 
   const getSortedPeople = (
     peopleList: Person[],
-    sort: string | null,
-    order: string | null,
+    sort: SortField | null,
+    order: SortOrder,
   ) => {
     return [...peopleList].sort((personA, personB) => {
       switch (sort) {
@@ -91,9 +93,8 @@ export const PeoplePage = () => {
     return nameMatch && matchesCenturies && matchesSex;
   });
 
-  const currentSort = searchParams.get('sort');
-  const currentOrder = searchParams.get('order');
-  const sortIcon = currentOrder === 'desc' ? '▼' : '▲';
+  const currentSort = searchParams.get('sort') as SortField | null;
+  const currentOrder = searchParams.get('order') as SortOrder;
 
   return (
     <>
@@ -137,7 +138,17 @@ export const PeoplePage = () => {
                                 : 'asc',
                         }}
                       >
-                        Name{currentSort === 'name' && sortIcon}
+                        Name
+                        {currentSort === 'name' && (
+                          <img
+                            src={
+                              currentOrder === 'desc'
+                                ? '/images/sort_desc.png'
+                                : '/images/sort_asc.png'
+                            }
+                            alt={currentOrder || ''}
+                          />
+                        )}
                       </SearchLink>
                     </th>
                     <th>
@@ -152,7 +163,17 @@ export const PeoplePage = () => {
                                 : 'asc',
                         }}
                       >
-                        Sex{currentSort === 'sex' && sortIcon}
+                        Sex
+                        {currentSort === 'sex' && (
+                          <img
+                            src={
+                              currentOrder === 'desc'
+                                ? '/images/sort_desc.png'
+                                : '/images/sort_asc.png'
+                            }
+                            alt={currentOrder || ''}
+                          />
+                        )}
                       </SearchLink>
                     </th>
                     <th>
@@ -168,7 +189,17 @@ export const PeoplePage = () => {
                                 : 'asc',
                         }}
                       >
-                        Born{currentSort === 'born' && sortIcon}
+                        Born
+                        {currentSort === 'born' && (
+                          <img
+                            src={
+                              currentOrder === 'desc'
+                                ? '/images/sort_desc.png'
+                                : '/images/sort_asc.png'
+                            }
+                            alt={currentOrder || ''}
+                          />
+                        )}
                       </SearchLink>
                     </th>
                     <th>
@@ -184,7 +215,17 @@ export const PeoplePage = () => {
                                 : 'asc',
                         }}
                       >
-                        Died{currentSort === 'died' && sortIcon}
+                        Died
+                        {currentSort === 'died' && (
+                          <img
+                            src={
+                              currentOrder === 'desc'
+                                ? '/images/sort_desc.png'
+                                : '/images/sort_asc.png'
+                            }
+                            alt={currentOrder || ''}
+                          />
+                        )}
                       </SearchLink>
                     </th>
                     <th>Mother</th>
@@ -192,7 +233,7 @@ export const PeoplePage = () => {
                   </tr>
                 </thead>
 
-                {/* сама таблиця з даними*/}
+                {/* сама таблиця з даними */}
                 <tbody>
                   {visiblePeople.map(person => {
                     const mother = people.find(
